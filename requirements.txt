@@ -1,10 +1,4 @@
 streamlit
 pandas
-numpy
-sqlmodel
-pydantic
-xlsxwriter
 plotly
-python-dateutil
-PyYAML
-bcrypt
+xlsxwriter
