@@ -1,5 +1,5 @@
 import streamlit as st
-from src.auth.auth import require_auth, setup_sidebar
+from src.auth.simple_auth import require_auth, setup_sidebar
 
 # Auto-initialize database on first run
 @st.cache_resource

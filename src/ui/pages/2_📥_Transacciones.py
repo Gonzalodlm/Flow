@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import date, datetime
 from sqlmodel import Session, select
-from src.auth.auth import require_auth, get_current_company_id
+from src.auth.simple_auth import require_auth, get_current_company_id
 from src.core.db import get_session
 from src.core.models import Transaction, Account, Company, AccountType, RecurrenceType
 from src.ui.components import (

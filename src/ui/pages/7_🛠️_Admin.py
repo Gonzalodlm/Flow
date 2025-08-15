@@ -1,6 +1,6 @@
 import streamlit as st
 from sqlmodel import Session, select
-from src.auth.auth import require_auth, get_current_company_id, is_admin
+from src.auth.simple_auth import require_auth, get_current_company_id, is_admin
 from src.core.db import get_session
 from src.core.models import Company, User, Account, AccountType, UserRole
 from src.ui.components import display_success_message, display_error_message

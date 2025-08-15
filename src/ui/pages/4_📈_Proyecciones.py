@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from sqlmodel import Session
-from src.auth.auth import require_auth, get_current_company_id
+from src.auth.simple_auth import require_auth, get_current_company_id
 from src.core.db import get_session
 from src.core.logic import CashFlowEngine
 from src.core.models import Company
@@ -198,8 +198,8 @@ def main():
                     # Generate Excel export
                     assumptions = engine.get_assumptions()
                     
-                    from src.core.exporters import ExcelExporter
-                    exporter = ExcelExporter()
+                    from src.core.simple_exporters import SimpleExcelExporter
+                    exporter = SimpleExcelExporter()
                     
                     excel_data = exporter.export_cash_flow_report(
                         projections, assumptions, kpis, 

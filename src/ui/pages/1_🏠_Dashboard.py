@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import date
 from sqlmodel import Session
-from src.auth.auth import require_auth, get_current_company_id
+from src.auth.simple_auth import require_auth, get_current_company_id
 from src.core.db import get_session
 from src.core.logic import CashFlowEngine
 from src.core.models import Company

@@ -1,23 +1,10 @@
-# Core Streamlit
-streamlit==1.28.1
-
-# Data Processing
-pandas==2.0.3
-numpy==1.24.3
-
-# Database & Models
-sqlmodel==0.0.8
-pydantic==2.4.2
-
-# Authentication
-streamlit-authenticator==0.2.3
-bcrypt==4.0.1
-PyYAML==6.0.1
-
-# Export & Visualization
-xlsxwriter==3.1.9
-reportlab==4.0.4
-plotly==5.17.0
-
-# Utilities
-python-dateutil==2.8.2
+streamlit
+pandas
+numpy
+sqlmodel
+pydantic
+xlsxwriter
+plotly
+python-dateutil
+PyYAML
+bcrypt

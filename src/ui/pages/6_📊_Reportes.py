@@ -1,11 +1,11 @@
 import streamlit as st
 from datetime import date, datetime
 from sqlmodel import Session
-from src.auth.auth import require_auth, get_current_company_id
+from src.auth.simple_auth import require_auth, get_current_company_id
 from src.core.db import get_session
 from src.core.logic import CashFlowEngine
 from src.core.models import Company, Scenario
-from src.core.exporters import ExcelExporter, PDFExporter
+from src.core.simple_exporters import SimpleExcelExporter
 from src.ui.components import display_success_message, display_error_message
 
 st.set_page_config(page_title="Reports", page_icon="📊", layout="wide")
@@ -106,7 +106,7 @@ def handle_cashflow_reports(session: Session, company_id: int, company):
             
             if st.button("📥 Download Excel Report", use_container_width=True):
                 try:
-                    exporter = ExcelExporter()
+                    exporter = SimpleExcelExporter()
                     excel_data = exporter.export_cash_flow_report(
                         data['projections'],
                         data['assumptions'],
@@ -130,36 +130,13 @@ def handle_cashflow_reports(session: Session, company_id: int, company):
             
             st.markdown("---")
             
-            # PDF Report
+            # PDF Report (Coming Soon)
             st.markdown("##### 📄 PDF Report")
-            st.write("Executive summary report perfect for sharing:")
+            st.info("🚧 PDF export feature coming soon! Use Excel export for now.")
+            st.write("Will include:")
             st.write("• Executive Summary")
             st.write("• Key Metrics Dashboard")
             st.write("• 12-Month Projection Summary")
-            
-            if st.button("📥 Download PDF Report", use_container_width=True):
-                try:
-                    exporter = PDFExporter()
-                    pdf_data = exporter.export_cash_flow_report(
-                        data['projections'],
-                        data['assumptions'],
-                        data['kpis'],
-                        data['company'].name,
-                        data['company'].base_currency
-                    )
-                    
-                    filename = f"cashflow_report_{data['company'].name.replace(' ', '_').lower()}_{date.today().strftime('%Y%m%d')}.pdf"
-                    
-                    st.download_button(
-                        label="💾 Download PDF",
-                        data=pdf_data,
-                        file_name=filename,
-                        mime="application/pdf",
-                        use_container_width=True
-                    )
-                    
-                except Exception as e:
-                    display_error_message("PDF export failed", str(e))
             
             st.markdown("---")
             
