@@ -39,25 +39,65 @@ def check_auth():
     return True
 
 # Sample data
-def get_sample_data():
-    dates = pd.date_range(start='2024-01-01', end='2024-12-31', freq='M')
+def get_sample_data(months=12, growth_rate=0.02):
+    """Generate sample cash flow data with configurable parameters."""
+    start_date = datetime.now().replace(day=1)  # Start from current month
+    dates = pd.date_range(start=start_date, periods=months, freq='M')
     data = []
+    cumulative = 100000  # Starting cash position
     
     for i, month in enumerate(dates):
-        revenue = 50000 + (i * 2000)  # Growing revenue
-        expenses = -30000 - (i * 500)  # Growing expenses
-        net_cash = revenue + expenses
+        # Revenue with growth and seasonality
+        base_revenue = 50000
+        seasonal_factor = 1 + 0.1 * (i % 12 / 12)  # Small seasonal variation
+        revenue = base_revenue * (1 + growth_rate) ** i * seasonal_factor
+        
+        # Expenses (variable and fixed)
+        variable_expenses = -revenue * 0.35  # 35% of revenue
+        fixed_expenses = -15000  # Fixed monthly costs
+        total_expenses = variable_expenses + fixed_expenses
+        
+        # Net cash flow
+        net_cash = revenue + total_expenses
+        cumulative += net_cash
         
         data.append({
             'Month': month.strftime('%b %Y'),
             'Date': month,
-            'Revenue': revenue,
-            'Expenses': expenses,
-            'Net Cash Flow': net_cash,
-            'Cumulative Cash': sum([d['Net Cash Flow'] for d in data]) + net_cash
+            'Revenue': round(revenue, 0),
+            'Expenses': round(total_expenses, 0),
+            'Net Cash Flow': round(net_cash, 0),
+            'Cumulative Cash': round(cumulative, 0)
         })
     
     return pd.DataFrame(data)
+
+# KPI Calculations
+def calculate_kpis(df):
+    """Calculate key performance indicators from cash flow data."""
+    min_cash = df['Cumulative Cash'].min()
+    min_cash_month = df.loc[df['Cumulative Cash'].idxmin(), 'Month']
+    final_cash = df['Cumulative Cash'].iloc[-1]
+    
+    # Calculate runway (months until cash runs out)
+    negative_months = df[df['Net Cash Flow'] < 0]
+    if len(negative_months) > 0:
+        avg_burn = abs(negative_months['Net Cash Flow'].mean())
+        current_cash = df['Cumulative Cash'].iloc[0]
+        runway = int(current_cash / avg_burn) if avg_burn > 0 else 999
+    else:
+        runway = 999  # Positive cash flow
+    
+    # Average burn rate (negative cash flows only)
+    burn_rate = abs(df[df['Net Cash Flow'] < 0]['Net Cash Flow'].mean()) if len(negative_months) > 0 else 0
+    
+    return {
+        'min_cash': min_cash,
+        'min_cash_month': min_cash_month,
+        'final_cash': final_cash,
+        'runway_months': runway if runway < 999 else None,
+        'burn_rate': burn_rate
+    }
 
 # Main app
 def main():
@@ -80,19 +120,49 @@ def main():
     with tab1:
         st.header("📊 Dashboard")
         
-        # Sample KPIs
+        # Get data and calculate KPIs
+        df = get_sample_data(24)  # 24 months
+        kpis = calculate_kpis(df)
+        
+        # Display KPIs
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.metric("💰 Current Cash", "$125,000", "+$15,000")
+            current_cash = df['Cumulative Cash'].iloc[0] if len(df) > 0 else 0
+            st.metric("💰 Current Cash", f"${current_cash:,.0f}")
         with col2:
-            st.metric("📉 Min Cash Position", "$45,000", "Mar 2024")
+            st.metric("📉 Min Cash Position", f"${kpis['min_cash']:,.0f}", kpis['min_cash_month'])
         with col3:
-            st.metric("🏃 Runway", "18 months", "+2 months")
+            runway_text = f"{kpis['runway_months']} months" if kpis['runway_months'] else "∞"
+            st.metric("🏃 Runway", runway_text)
         with col4:
-            st.metric("📊 Burn Rate", "$8,500/mo", "-$500")
+            st.metric("📊 Avg Burn Rate", f"${kpis['burn_rate']:,.0f}/mo")
         
-        # Sample chart
-        df = get_sample_data()
+        # Status indicators
+        st.markdown("### 🚦 Financial Health")
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if kpis['min_cash'] < 0:
+                st.error("⚠️ **Cash Flow Alert**: Projected to go negative!")
+            else:
+                st.success("✅ **Cash Positive**: Healthy cash position")
+        
+        with col2:
+            if kpis['runway_months'] and kpis['runway_months'] < 6:
+                st.error(f"🔥 **Short Runway**: Only {kpis['runway_months']} months left")
+            elif kpis['runway_months'] and kpis['runway_months'] < 12:
+                st.warning(f"⚠️ **Moderate Runway**: {kpis['runway_months']} months remaining")
+            else:
+                st.success("✅ **Sufficient Runway**: Strong financial position")
+        
+        with col3:
+            growth_rate = ((df['Revenue'].iloc[-1] / df['Revenue'].iloc[0]) ** (1/len(df)) - 1) * 100
+            if growth_rate > 5:
+                st.success(f"📈 **High Growth**: {growth_rate:.1f}% monthly")
+            elif growth_rate > 2:
+                st.info(f"📊 **Steady Growth**: {growth_rate:.1f}% monthly")
+            else:
+                st.warning(f"📉 **Slow Growth**: {growth_rate:.1f}% monthly")
         
         fig = go.Figure()
         fig.add_trace(go.Scatter(
@@ -145,15 +215,13 @@ def main():
         with col2:
             st.subheader("📊 24-Month Projection")
             
-            df = get_sample_data()
+            # Generate data with custom parameters
+            df = get_sample_data(24, sales_growth)
             
-            # Apply growth rate
-            for i in range(len(df)):
-                df.loc[i, 'Revenue'] = df.loc[i, 'Revenue'] * (1 + sales_growth) ** i
-                df.loc[i, 'Net Cash Flow'] = df.loc[i, 'Revenue'] + df.loc[i, 'Expenses']
-            
-            # Recalculate cumulative
-            df['Cumulative Cash'] = df['Net Cash Flow'].cumsum()
+            # Calculate impact of DSO/DPO (simplified)
+            working_capital_impact = (dso_days - dpo_days) * 1000  # Simplified calculation
+            if working_capital_impact != 0:
+                st.info(f"Working Capital Impact: ${working_capital_impact:,.0f} (DSO-DPO difference)")
             
             # Format for display
             display_df = df[['Month', 'Revenue', 'Expenses', 'Net Cash Flow', 'Cumulative Cash']].copy()
@@ -161,6 +229,26 @@ def main():
                 display_df[col] = display_df[col].apply(lambda x: f"${x:,.0f}")
             
             st.dataframe(display_df, use_container_width=True, hide_index=True)
+            
+            # Projection insights
+            st.markdown("#### 💡 Projection Insights")
+            final_revenue = df['Revenue'].iloc[-1]
+            revenue_growth_total = ((final_revenue / df['Revenue'].iloc[0]) - 1) * 100
+            
+            col_a, col_b = st.columns(2)
+            with col_a:
+                st.metric("📈 Total Revenue Growth", f"{revenue_growth_total:.1f}%", "24 months")
+            with col_b:
+                final_cash = df['Cumulative Cash'].iloc[-1]
+                st.metric("💰 Final Cash Position", f"${final_cash:,.0f}")
+            
+            # Scenario analysis
+            if sales_growth > 0.05:  # 5%
+                st.success("🚀 **Aggressive Growth Scenario**: High growth targets set!")
+            elif sales_growth > 0.02:  # 2%
+                st.info("📊 **Moderate Growth Scenario**: Steady expansion expected")
+            else:
+                st.warning("🐌 **Conservative Scenario**: Low growth assumptions")
     
     with tab3:
         st.header("📥 Transaction Data Upload")
@@ -217,23 +305,16 @@ def main():
                 use_container_width=True
             )
             
-            # Excel export
-            output = io.BytesIO()
-            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-                df.to_excel(writer, sheet_name='Cash Flow', index=False)
-                
-                # Add formatting
-                workbook = writer.book
-                worksheet = writer.sheets['Cash Flow']
-                
-                money_format = workbook.add_format({'num_format': '$#,##0'})
-                worksheet.set_column('C:F', 12, money_format)
+            # Excel export (simplified)
+            st.info("💡 **Tip**: Use CSV export for Excel compatibility. You can open CSV files directly in Excel!")
             
+            # Alternative: JSON export for data backup
+            json_data = df.to_json(orient='records', date_format='iso')
             st.download_button(
-                label="📊 Download Excel Report",
-                data=output.getvalue(),
-                file_name=f"cashflow_report_{datetime.now().strftime('%Y%m%d')}.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                label="📄 Download JSON Data",
+                data=json_data,
+                file_name=f"cashflow_data_{datetime.now().strftime('%Y%m%d')}.json",
+                mime="application/json",
                 use_container_width=True
             )
         
