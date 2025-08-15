@@ -1,0 +1,54 @@
+date,category,description,amount,currency,account,paid
+2024-01-15,Sales,Q1 Product Sales Revenue,45000.00,USD,Revenue,true
+2024-01-30,Payroll,January Salaries and Benefits,-28000.00,USD,Salaries & Benefits,true
+2024-01-31,Rent,Office Rent January,-5000.00,USD,Operating Expenses,true
+2024-02-01,COGS,Cost of Goods Sold January,-18000.00,USD,Cost of Goods Sold,true
+2024-02-15,Sales,February Product Sales,48000.00,USD,Revenue,true
+2024-02-20,Marketing,Digital Marketing Campaign,-3500.00,USD,Marketing & Sales,true
+2024-02-28,Payroll,February Salaries,-28000.00,USD,Salaries & Benefits,true
+2024-02-29,Rent,Office Rent February,-5000.00,USD,Operating Expenses,true
+2024-03-01,COGS,Cost of Goods Sold February,-19200.00,USD,Cost of Goods Sold,true
+2024-03-10,Equipment,New Computer Equipment,-8000.00,USD,Equipment,true
+2024-03-15,Sales,March Product Sales,52000.00,USD,Revenue,true
+2024-03-25,Professional Services,Consulting Revenue,12000.00,USD,Revenue,true
+2024-03-30,Payroll,March Salaries,-29000.00,USD,Salaries & Benefits,true
+2024-03-31,Rent,Office Rent March,-5000.00,USD,Operating Expenses,true
+2024-04-01,COGS,Cost of Goods Sold March,-20800.00,USD,Cost of Goods Sold,true
+2024-04-15,Sales,April Product Sales,55000.00,USD,Revenue,true
+2024-04-20,Utilities,Electricity and Internet,-800.00,USD,Operating Expenses,true
+2024-04-30,Payroll,April Salaries,-30000.00,USD,Salaries & Benefits,true
+2024-05-01,COGS,Cost of Goods Sold April,-22000.00,USD,Cost of Goods Sold,true
+2024-05-05,Loan Payment,Bank Loan Principal and Interest,-2500.00,USD,Bank Loan,true
+2024-05-15,Sales,May Product Sales,58000.00,USD,Revenue,true
+2024-05-20,Insurance,Business Insurance Annual,-6000.00,USD,Operating Expenses,true
+2024-05-31,Payroll,May Salaries,-31000.00,USD,Salaries & Benefits,true
+2024-06-01,COGS,Cost of Goods Sold May,-23200.00,USD,Cost of Goods Sold,true
+2024-06-10,Software,Software Licenses Annual,-4500.00,USD,Software & Technology,true
+2024-06-15,Sales,June Product Sales,61000.00,USD,Revenue,true
+2024-06-25,Travel,Business Travel Expenses,-2200.00,USD,Operating Expenses,true
+2024-06-30,Payroll,June Salaries,-32000.00,USD,Salaries & Benefits,true
+2024-07-01,COGS,Cost of Goods Sold June,-24400.00,USD,Cost of Goods Sold,true
+2024-07-15,Sales,July Product Sales,64000.00,USD,Revenue,true
+2024-07-20,Marketing,Trade Show Participation,-8000.00,USD,Marketing & Sales,true
+2024-07-31,Payroll,July Salaries,-33000.00,USD,Salaries & Benefits,true
+2024-08-01,COGS,Cost of Goods Sold July,-25600.00,USD,Cost of Goods Sold,true
+2024-08-05,Loan Payment,Bank Loan Principal and Interest,-2500.00,USD,Bank Loan,true
+2024-08-15,Sales,August Product Sales,67000.00,USD,Revenue,true
+2024-08-25,Equipment,Office Furniture,-3500.00,USD,Equipment,true
+2024-08-31,Payroll,August Salaries,-34000.00,USD,Salaries & Benefits,true
+2024-09-01,COGS,Cost of Goods Sold August,-26800.00,USD,Cost of Goods Sold,true
+2024-09-15,Sales,September Product Sales,70000.00,USD,Revenue,true
+2024-09-20,Legal,Legal and Compliance Fees,-4000.00,USD,Operating Expenses,true
+2024-09-30,Payroll,September Salaries,-35000.00,USD,Salaries & Benefits,true
+2024-10-01,COGS,Cost of Goods Sold September,-28000.00,USD,Cost of Goods Sold,true
+2024-10-15,Sales,October Product Sales,73000.00,USD,Revenue,true
+2024-10-25,Training,Employee Training Programs,-2500.00,USD,Operating Expenses,true
+2024-10-31,Payroll,October Salaries,-36000.00,USD,Salaries & Benefits,true
+2024-11-01,COGS,Cost of Goods Sold October,-29200.00,USD,Cost of Goods Sold,true
+2024-11-05,Loan Payment,Bank Loan Principal and Interest,-2500.00,USD,Bank Loan,true
+2024-11-15,Sales,November Product Sales,76000.00,USD,Revenue,true
+2024-11-30,Payroll,November Salaries,-37000.00,USD,Salaries & Benefits,true
+2024-12-01,COGS,Cost of Goods Sold November,-30400.00,USD,Cost of Goods Sold,true
+2024-12-15,Sales,December Product Sales,79000.00,USD,Revenue,true
+2024-12-20,Bonuses,Year-end Employee Bonuses,-15000.00,USD,Salaries & Benefits,true
+2024-12-31,Payroll,December Salaries,-38000.00,USD,Salaries & Benefits,true

@@ -1,0 +1,24 @@
+credentials:
+  usernames:
+    admin:
+      email: admin@demo.com
+      name: Admin User
+      password: $2b$12$gLH.eZpfvbFf9JoBFsKFOOKj9o.ktT9l6s9r2vNXY1mGNBq.8qE1y  # admin123
+      company_id: 1
+      role: admin
+    analyst:
+      email: analyst@demo.com
+      name: Financial Analyst  
+      password: $2b$12$6kPhgKlFY1QTbYHwX7y4pOJy5zN9AzOUwFB0HvD1VR3Kd4L8PdD4K  # analyst123
+      company_id: 1
+      role: analyst
+
+cookie:
+  expiry_days: 30
+  key: cashflow_auth_key_2024
+  name: cashflow_auth_cookie
+
+preauthorized:
+  emails:
+  - admin@demo.com
+  - analyst@demo.com
