@@ -119,7 +119,7 @@ def seed_database():
             name="Base Case",
             base=True,
             company_id=company.id,
-            params={}
+            params="{}"
         )
         session.add(base_scenario)
         session.commit()

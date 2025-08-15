@@ -328,12 +328,15 @@ def handle_create_scenario(session: Session, company_id: int):
                     name=scenario_name,
                     company_id=company_id,
                     base=False,
-                    params={
-                        'description': scenario_description,
-                        'scenario_type': scenario_type,
-                        'created_from': 'ui'
-                    }
+                    params="{}"
                 )
+                
+                # Set params using the new method
+                new_scenario.set_params({
+                    'description': scenario_description,
+                    'scenario_type': scenario_type,
+                    'created_from': 'ui'
+                })
                 
                 session.add(new_scenario)
                 session.commit()
@@ -399,7 +402,7 @@ def handle_manage_scenarios(session: Session, company_id: int):
             'Name': scenario.name,
             'Type': '🎯 Base' if scenario.base else '🧪 Custom',
             'Created': scenario.created_at.strftime('%Y-%m-%d'),
-            'Description': scenario.params.get('description', '')[:50] + '...' if scenario.params.get('description', '') else 'No description'
+            'Description': scenario.get_params().get('description', '')[:50] + '...' if scenario.get_params().get('description', '') else 'No description'
         })
     
     import pandas as pd
@@ -435,7 +438,7 @@ def handle_manage_scenarios(session: Session, company_id: int):
                         name=new_name,
                         company_id=company_id,
                         base=False,
-                        params=selected_scenario.params.copy()
+                        params=selected_scenario.params  # Copy the JSON string
                     )
                     
                     session.add(duplicate)

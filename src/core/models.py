@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from typing import Optional, Dict, Any
 from enum import Enum
-from sqlmodel import SQLModel, Field, Relationship, JSON, Column
+from sqlmodel import SQLModel, Field, Relationship
 import json
 
 class UserRole(str, Enum):
@@ -74,11 +74,22 @@ class Scenario(SQLModel, table=True):
     company_id: int = Field(foreign_key="company.id", index=True)
     name: str = Field(index=True)
     base: bool = Field(default=False)
-    params: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
+    params: str = Field(default="{}")  # Store JSON as string for better compatibility
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     company: Company = Relationship(back_populates="scenarios")
     assumptions: list["Assumption"] = Relationship(back_populates="scenario")
+    
+    def get_params(self) -> Dict[str, Any]:
+        """Get params as dictionary."""
+        try:
+            return json.loads(self.params)
+        except:
+            return {}
+    
+    def set_params(self, params: Dict[str, Any]):
+        """Set params from dictionary."""
+        self.params = json.dumps(params)
 
 class Assumption(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
